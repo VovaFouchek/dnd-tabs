@@ -1,0 +1,68 @@
+@use '../../styles/variables.scss' as *;
+
+.tabs {
+  display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: fit-content;
+  min-width: 100px;
+  min-height: 50px;
+  background-color: $color-background-white;
+
+  &__empty {
+    text-align: center;
+  }
+
+  @media screen and (max-width: 435px) {
+    gap: 10px;
+    flex-direction: column;
+    padding: 10px 12px;
+    border-radius: 15px;
+  }
+
+  .tab {
+    position: relative;
+    padding: 15px 20px;
+    border-top: 2px solid transparent;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    font-size: 1rem;
+    line-height: 1;
+    color: $color-gray-dark;
+    background: $color-background-white;
+    transition: all 0.15s;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 35%;
+      right: 0;
+      width: 1px;
+      height: 16px;
+      background: $color-background-light;
+    }
+
+    &__icon {
+      margin-right: 10px;
+      pointer-events: none;
+    }
+
+    &:hover {
+      // color: #fff;
+      background-color: $color-background-lighter;
+    }
+
+    &.active {
+      border-top: 2px solid $color-blue;
+      color: $color-title;
+      background-color: $color-background-light;
+    }
+  }
+}
+
+.tab__content {
+  height: calc(100% - 86px);
+  margin: 20px;
+  border-radius: 6px;
+  background-color: #fff;
+}

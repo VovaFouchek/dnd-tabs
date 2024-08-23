@@ -1,0 +1,36 @@
+@use '../../styles/variables.scss' as *;
+
+header {
+  position: fixed;
+  width: 100%;
+  height: 69px;
+  left: 62px;
+  right: 0;
+  border-bottom: 1px solid $color-gray-light;
+  background: $color-background-white;
+  z-index: 1;
+}
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 62px;
+  height: 100vh;
+  border-right: 1px solid $color-gray-light;
+  background: $color-background-white;
+}
+
+.inner {
+  position: relative;
+  width: 100%;
+  display: flex;
+  height: 100vh;
+  padding-top: 69px;
+  padding-left: 62px;
+  background: $color-background-light;
+}
+
+.content {
+  width: 100%;
+}
