@@ -31,6 +31,7 @@
     color: $color-gray-dark;
     background: $color-background-white;
     transition: all 0.15s;
+    cursor: 'move';
 
     &::after {
       content: '';
@@ -39,7 +40,16 @@
       right: 0;
       width: 1px;
       height: 16px;
-      background: $color-background-light;
+      background: $color-background-white;
+    }
+
+    &.draggable {
+      background-color: $color-background-light !important;
+      color: $color-background-light !important;
+
+      .tab__icon {
+        visibility: hidden;
+      }
     }
 
     &__icon {
@@ -48,7 +58,6 @@
     }
 
     &:hover {
-      // color: #fff;
       background-color: $color-background-lighter;
     }
 

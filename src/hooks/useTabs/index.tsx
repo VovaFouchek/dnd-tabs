@@ -1,12 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Tab } from '../../components/Tabs';
+import { useDrop } from 'react-dnd';
 
 interface useTabsProps {
-  tabs: Tab[];
+  initialTabs: Tab[];
   storageKey?: string;
 }
 
-const useTabs = ({ tabs, storageKey }: useTabsProps) => {
+const useTabs = ({ initialTabs, storageKey }: useTabsProps) => {
   const getInitialTab = () => {
     if (storageKey) {
       const savedTab = localStorage.getItem(storageKey);
@@ -16,7 +17,34 @@ const useTabs = ({ tabs, storageKey }: useTabsProps) => {
     return tabs[0]?.id;
   };
 
+  const [tabs, setTabs] = useState<Tab[]>(initialTabs);
   const [activeTab, setActiveTab] = useState<string>(getInitialTab);
+
+  const findTab = useCallback(
+    (id: string) => {
+      const tab = tabs.filter((tab) => tab.id === id)[0];
+      return {
+        tab,
+        index: tabs.indexOf(tab),
+      };
+    },
+    [tabs],
+  );
+
+  const moveTab = useCallback(
+    (id: string, atIndex: number) => {
+      const { tab, index } = findTab(id);
+
+      const updatedTabs = [...tabs];
+      updatedTabs.splice(index, 1);
+      updatedTabs.splice(atIndex, 0, tab);
+
+      setTabs(updatedTabs);
+    },
+    [findTab, tabs],
+  );
+
+  const [, drop] = useDrop(() => ({ accept: 'TAB' }));
 
   const switchTab = (tabName: string): void => setActiveTab(tabName);
 
@@ -26,7 +54,7 @@ const useTabs = ({ tabs, storageKey }: useTabsProps) => {
     }
   }, [activeTab, storageKey]);
 
-  return { activeTab, switchTab, tabs };
+  return { activeTab, switchTab, tabs, moveTab, findTab, drop };
 };
 
 export default useTabs;

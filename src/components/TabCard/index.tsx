@@ -1,10 +1,14 @@
-import type { CSSProperties } from 'react';
 import { memo } from 'react';
+
 import { useDrag, useDrop } from 'react-dnd';
+import cx from 'classnames';
+
+import { Tab } from '../Tabs';
 
 interface TabCardProps {
-  id: string;
-  label: string;
+  tab: Tab;
+  activeTab: string;
+  switchTab: (id: string) => void;
   moveTab: (id: string, to: number) => void;
   findTab: (id: string) => { index: number };
 }
@@ -14,15 +18,8 @@ interface DragItem {
   originalIndex: number;
 }
 
-const tabCardStyle: CSSProperties = {
-  border: '1px dashed gray',
-  padding: '0.5rem 1rem',
-  marginBottom: '.5rem',
-  backgroundColor: 'white',
-  cursor: 'move',
-};
-
-const TabCard = ({ id, label, moveTab, findTab }: TabCardProps) => {
+const TabCard = ({ tab, activeTab, switchTab, moveTab, findTab }: TabCardProps) => {
+  const { id, label, icon } = tab;
   const originalIndex = findTab(id).index;
 
   const [{ isDragging }, drag] = useDrag(
@@ -57,12 +54,22 @@ const TabCard = ({ id, label, moveTab, findTab }: TabCardProps) => {
     [findTab, moveTab],
   );
 
-  const opacity = isDragging ? 0.5 : 1;
-
   return (
-    <div ref={(node) => drag(drop(node))} style={{ ...tabCardStyle, opacity }}>
+    <button
+      role="tab"
+      id={id}
+      key={id}
+      ref={(node) => drag(drop(node))}
+      onClick={() => switchTab(id)}
+      aria-selected={activeTab === id}
+      className={cx('tab', {
+        active: activeTab === id,
+        draggable: isDragging,
+      })}
+    >
+      <img src={icon} className="tab__icon" alt={id} />
       {label}
-    </div>
+    </button>
   );
 };
 

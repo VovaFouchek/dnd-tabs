@@ -1,8 +1,9 @@
 import React from 'react';
-import './tabs.scss';
 
-import cx from 'classnames';
 import useTabs from '../../hooks/useTabs';
+import TabCard from '../TabCard';
+
+import './tabs.scss';
 
 export interface Tab {
   readonly id: string;
@@ -12,34 +13,37 @@ export interface Tab {
 }
 
 interface TabsProps {
-  tabs: Tab[];
+  initialTabs: Tab[];
   storageKey?: string;
 }
 
-const Tabs = ({ tabs, storageKey }: TabsProps) => {
-  const { activeTab, switchTab, tabs: tabItems } = useTabs({ tabs, storageKey });
+const Tabs = ({ initialTabs, storageKey }: TabsProps) => {
+  const {
+    activeTab,
+    switchTab,
+    tabs: tabItems,
+    drop,
+    moveTab,
+    findTab,
+  } = useTabs({ initialTabs, storageKey });
 
-  if (tabs.length === 0) {
+  if (tabItems.length === 0) {
     return <div className="tabs__empty">No tabs available</div>;
   }
 
   return (
     <>
       <div className="wrapper">
-        <div className="tabs">
+        <div className="tabs" ref={drop}>
           {tabItems.map((tab) => (
-            <button
+            <TabCard
               key={tab.id}
-              role="tab"
-              aria-selected={activeTab === tab.id}
-              onClick={() => switchTab(tab.id)}
-              className={cx('tab', {
-                active: activeTab === tab.id,
-              })}
-            >
-              <img src={tab.icon} className="tab__icon" alt={tab.id} />
-              {tab.label}
-            </button>
+              tab={tab}
+              moveTab={moveTab}
+              findTab={findTab}
+              activeTab={activeTab}
+              switchTab={switchTab}
+            />
           ))}
         </div>
       </div>
