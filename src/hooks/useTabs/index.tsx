@@ -46,6 +46,12 @@ const useTabs = ({ initialTabs, storageKey }: useTabsProps) => {
 
   const [, drop] = useDrop(() => ({ accept: 'TAB' }));
 
+  const togglePin = (id: string) => {
+    setTabs((prevTabs) =>
+      prevTabs.map((tab) => (tab.id === id ? { ...tab, isPinned: !tab.isPinned } : tab)),
+    );
+  };
+
   const switchTab = (tabName: string): void => setActiveTab(tabName);
 
   useEffect(() => {
@@ -54,7 +60,7 @@ const useTabs = ({ initialTabs, storageKey }: useTabsProps) => {
     }
   }, [activeTab, storageKey]);
 
-  return { activeTab, switchTab, tabs, moveTab, findTab, drop };
+  return { activeTab, switchTab, tabs, moveTab, findTab, drop, togglePin };
 };
 
 export default useTabs;

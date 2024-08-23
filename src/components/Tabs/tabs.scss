@@ -1,77 +1,89 @@
 @use '../../styles/variables.scss' as *;
 
-.tabs {
-  display: inline-flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  width: fit-content;
-  min-width: 100px;
-  min-height: 50px;
-  background-color: $color-background-white;
+.wrapper {
+  overflow: auto;
 
-  &__empty {
-    text-align: center;
-  }
+  .tabs {
+    display: flex;
+    justify-content: center;
+    width: max-content;
+    min-width: 100px;
+    min-height: 50px;
+    background-color: $color-background-white;
 
-  @media screen and (max-width: 435px) {
-    gap: 10px;
-    flex-direction: column;
-    padding: 10px 12px;
-    border-radius: 15px;
-  }
-
-  .tab {
-    position: relative;
-    padding: 15px 20px;
-    border-top: 2px solid transparent;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 500;
-    font-size: 1rem;
-    line-height: 1;
-    color: $color-gray-dark;
-    background: $color-background-white;
-    transition: all 0.15s;
-    cursor: 'move';
-
-    &::after {
-      content: '';
-      position: absolute;
-      top: 35%;
-      right: 0;
-      width: 1px;
-      height: 16px;
-      background: $color-background-white;
+    &__empty {
+      text-align: center;
     }
 
-    &.draggable {
-      background-color: $color-background-light !important;
-      color: $color-background-light !important;
+    .tab {
+      position: relative;
+      min-width: fit-content;
+      padding: 15px 20px;
+      border-top: 2px solid transparent;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 500;
+      font-size: 0.875rem;
+      line-height: 1;
+      color: $color-gray-dark;
+      background: $color-background-white;
+      transition: all 0.15s;
+      cursor: grab;
 
-      .tab__icon {
-        visibility: hidden;
+      &.active {
+        border-top: 2px solid $color-blue;
+        color: $color-title;
+        background-color: $color-background-light;
+      }
+
+      &.draggable {
+        background-color: $color-background-light !important;
+        color: $color-background-light !important;
+
+        .tab__icon {
+          visibility: hidden;
+        }
+      }
+
+      &.pinned {
+        z-index: 5;
+        position: sticky;
+        left: 0;
+        border-top: 2px solid $color-gray-dark;
+
+        span {
+          display: none;
+        }
+
+        .tab__icon {
+          margin-right: initial;
+        }
+      }
+
+      &__icon {
+        margin-right: 10px;
+        pointer-events: none;
+      }
+
+      &::after {
+        content: '';
+        position: absolute;
+        top: 35%;
+        right: 0;
+        width: 1px;
+        height: 16px;
+        background: $color-background-white;
+      }
+
+      &:hover {
+        background-color: $color-background-lighter;
       }
     }
-
-    &__icon {
-      margin-right: 10px;
-      pointer-events: none;
-    }
-
-    &:hover {
-      background-color: $color-background-lighter;
-    }
-
-    &.active {
-      border-top: 2px solid $color-blue;
-      color: $color-title;
-      background-color: $color-background-light;
-    }
   }
-}
 
-.tab__content {
-  height: calc(100% - 86px);
-  margin: 20px;
-  border-radius: 6px;
-  background-color: #fff;
+  .tab__content {
+    height: calc(100% - 86px);
+    margin: 20px;
+    border-radius: 6px;
+    background-color: #fff;
+  }
 }

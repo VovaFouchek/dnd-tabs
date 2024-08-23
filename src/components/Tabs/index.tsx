@@ -9,6 +9,7 @@ export interface Tab {
   readonly id: string;
   label: string;
   icon: string;
+  isPinned?: boolean;
   content?: React.ReactNode; // * in production it needs to be require field
 }
 
@@ -25,6 +26,7 @@ const Tabs = ({ initialTabs, storageKey }: TabsProps) => {
     drop,
     moveTab,
     findTab,
+    togglePin,
   } = useTabs({ initialTabs, storageKey });
 
   if (tabItems.length === 0) {
@@ -43,6 +45,8 @@ const Tabs = ({ initialTabs, storageKey }: TabsProps) => {
               findTab={findTab}
               activeTab={activeTab}
               switchTab={switchTab}
+              isPinned={tab.isPinned}
+              togglePin={togglePin}
             />
           ))}
         </div>
