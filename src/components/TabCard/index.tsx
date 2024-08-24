@@ -1,10 +1,10 @@
-import { memo, useEffect, useRef, useState } from 'react';
+import { memo, useState } from 'react';
 
-import { useDrag, useDrop } from 'react-dnd';
 import cx from 'classnames';
 
-import { Tab } from '../Tabs';
+import useTabDragAndDrop from '../../hooks/useTabDragAndDrop';
 import ContextMenu from '../ContextMenu';
+import { Tab } from '../Tabs';
 
 interface TabCardProps {
   tab: Tab;
@@ -16,63 +16,20 @@ interface TabCardProps {
   findTab: (id: string) => { index: number };
 }
 
-interface DragItem {
-  id: string;
-  originalIndex: number;
-}
-
-const DELAY_FOR_LONG_PRESS = 2000;
-
 const TabCard = ({
   tab,
   activeTab,
+  isPinned,
+  togglePin,
   switchTab,
   moveTab,
   findTab,
-  isPinned,
-  togglePin,
 }: TabCardProps) => {
   const { id, label, icon } = tab;
+  const { ref, isDragging } = useTabDragAndDrop({ id, isPinned, moveTab, findTab });
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const isOpenMenu = Boolean(anchorEl);
-
-  const ref = useRef<HTMLButtonElement>(null);
-  const touchTimeoutRef = useRef<number | undefined>();
-
-  const originalIndex = findTab(id).index;
-  const [{ isDragging }, drag] = useDrag(
-    () => ({
-      type: 'TAB',
-      item: { id, originalIndex },
-      collect: (monitor) => ({
-        isDragging: monitor.isDragging(),
-      }),
-      end: (item, monitor) => {
-        const { id: droppedId, originalIndex } = item;
-        const didDrop = monitor.didDrop();
-
-        if (!didDrop) {
-          moveTab(droppedId, originalIndex);
-        }
-      },
-      canDrag: !isPinned,
-    }),
-    [id, originalIndex, moveTab],
-  );
-
-  const [, drop] = useDrop(
-    () => ({
-      accept: 'TAB',
-      hover({ id: draggedId }: DragItem) {
-        if (draggedId !== id) {
-          const { index: overIndex } = findTab(id);
-          moveTab(draggedId, overIndex);
-        }
-      },
-    }),
-    [findTab, moveTab],
-  );
 
   const handleContextMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
@@ -82,40 +39,6 @@ const TabCard = ({
   const handleCloseMenu = () => {
     setAnchorEl(null);
   };
-
-  useEffect(() => {
-    const node = ref.current;
-    if (!node) return;
-
-    const handleTouchStart = () => {
-      touchTimeoutRef.current = window.setTimeout(() => {
-        const dragEvent = new DragEvent('dragstart', {
-          bubbles: true,
-          cancelable: true,
-        });
-
-        node.dispatchEvent(dragEvent);
-      }, DELAY_FOR_LONG_PRESS);
-    };
-
-    const handleTouchEnd = () => {
-      if (touchTimeoutRef.current) {
-        clearTimeout(touchTimeoutRef.current);
-      }
-    };
-
-    node.addEventListener('touchstart', handleTouchStart, { passive: true });
-    node.addEventListener('touchend', handleTouchEnd, { passive: true });
-    node.addEventListener('touchmove', handleTouchEnd, { passive: true });
-
-    return () => {
-      node.removeEventListener('touchstart', handleTouchStart);
-      node.removeEventListener('touchend', handleTouchEnd);
-      node.removeEventListener('touchmove', handleTouchEnd);
-    };
-  }, []);
-
-  drag(drop(ref));
 
   return (
     <>

@@ -28,6 +28,7 @@
       background: $color-background-white;
       transition: all 0.15s;
       cursor: grab;
+      user-select: none;
 
       &.active {
         border-top: 2px solid $color-blue;

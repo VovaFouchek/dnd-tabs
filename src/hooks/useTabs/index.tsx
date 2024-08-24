@@ -60,7 +60,7 @@ const useTabs = ({ initialTabs, storageKey }: useTabsProps) => {
     }
   }, [activeTab, storageKey]);
 
-  return { activeTab, switchTab, tabs, moveTab, findTab, drop, togglePin };
+  return { tabs, activeTab, switchTab, moveTab, findTab, drop, togglePin };
 };
 
 export default useTabs;
