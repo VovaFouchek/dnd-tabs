@@ -35,6 +35,8 @@ const useTabs = ({ initialTabs, storageKey }: useTabsProps) => {
     (id: string, atIndex: number) => {
       const { tab, index } = findTab(id);
 
+      if (tab.isPinned) return;
+
       const updatedTabs = [...tabs];
       updatedTabs.splice(index, 1);
       updatedTabs.splice(atIndex, 0, tab);
@@ -60,7 +62,19 @@ const useTabs = ({ initialTabs, storageKey }: useTabsProps) => {
     }
   }, [activeTab, storageKey]);
 
-  return { tabs, activeTab, switchTab, moveTab, findTab, drop, togglePin };
+  const pinnedTabs = tabs.filter((tab) => tab.isPinned);
+  const unpinnedTabs = tabs.filter((tab) => !tab.isPinned);
+
+  return {
+    pinnedTabs,
+    unpinnedTabs,
+    activeTab,
+    switchTab,
+    moveTab,
+    findTab,
+    drop,
+    togglePin,
+  };
 };
 
 export default useTabs;

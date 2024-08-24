@@ -23,6 +23,7 @@ export const categories: Tab[] = [
     id: 'banking',
     label: 'Banking',
     icon: IBanking,
+    isPinned: true,
   },
   {
     id: 'telefonie',

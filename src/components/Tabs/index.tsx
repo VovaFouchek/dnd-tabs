@@ -19,17 +19,10 @@ interface TabsProps {
 }
 
 const Tabs = ({ initialTabs, storageKey }: TabsProps) => {
-  const {
-    activeTab,
-    switchTab,
-    tabs: tabItems,
-    drop,
-    moveTab,
-    findTab,
-    togglePin,
-  } = useTabs({ initialTabs, storageKey });
+  const { pinnedTabs, unpinnedTabs, activeTab, switchTab, drop, moveTab, findTab, togglePin } =
+    useTabs({ initialTabs, storageKey });
 
-  if (tabItems.length === 0) {
+  if (pinnedTabs.length === 0 && unpinnedTabs.length === 0) {
     return <div className="tabs__empty">No tabs available</div>;
   }
 
@@ -37,7 +30,22 @@ const Tabs = ({ initialTabs, storageKey }: TabsProps) => {
     <>
       <div className="wrapper">
         <div className="tabs" ref={drop}>
-          {tabItems.map((tab) => (
+          <div className="tabs__pinned-inner">
+            {pinnedTabs.map((tab) => (
+              <TabCard
+                key={tab.id}
+                tab={tab}
+                moveTab={moveTab}
+                findTab={findTab}
+                activeTab={activeTab}
+                switchTab={switchTab}
+                isPinned={tab.isPinned}
+                togglePin={togglePin}
+              />
+            ))}
+          </div>
+
+          {unpinnedTabs.map((tab) => (
             <TabCard
               key={tab.id}
               tab={tab}
@@ -52,7 +60,7 @@ const Tabs = ({ initialTabs, storageKey }: TabsProps) => {
         </div>
       </div>
 
-      {tabItems.map((tab) =>
+      {[...pinnedTabs, ...unpinnedTabs].map((tab) =>
         activeTab === tab.id ? (
           <div className="tab__content" key={tab.id}>
             {tab.content}

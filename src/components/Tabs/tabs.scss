@@ -15,9 +15,17 @@
       text-align: center;
     }
 
+    &__pinned-inner {
+      z-index: 5;
+      position: sticky;
+      left: 0;
+      box-shadow: 4px 0px 15px 3px rgb(34 60 80 / 5%);
+    }
+
     .tab {
       position: relative;
       min-width: fit-content;
+      min-height: 50px;
       padding: 15px 20px;
       border-top: 2px solid transparent;
       font-family: 'Montserrat', sans-serif;
@@ -46,10 +54,7 @@
       }
 
       &.pinned {
-        z-index: 5;
-        position: sticky;
-        left: 0;
-        border-top: 2px solid $color-gray-dark;
+        cursor: auto;
 
         span {
           display: none;
