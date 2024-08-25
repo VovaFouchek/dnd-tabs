@@ -11,7 +11,7 @@ interface ContextMenuProps {
 }
 
 const menuItemStyles = {
-  fontFamily: 'Montserrat, sans-serif',
+  fontFamily: 'Poppins, sans-serif',
   fontSize: '14px',
 };
 
@@ -26,7 +26,7 @@ const ContextMenu = ({
   return (
     <>
       <Menu
-        id="basic-menu"
+        id="menu"
         anchorEl={anchorEl}
         open={isOpenMenu}
         onClose={handleCloseMenu}

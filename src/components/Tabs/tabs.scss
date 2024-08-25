@@ -28,7 +28,7 @@
       min-height: 50px;
       padding: 15px 20px;
       border-top: 2px solid transparent;
-      font-family: 'Montserrat', sans-serif;
+      font-family: 'Poppins', sans-serif;
       font-weight: 500;
       font-size: 0.875rem;
       line-height: 1;
@@ -54,7 +54,11 @@
       }
 
       &.pinned {
-        cursor: auto;
+        cursor: pointer;
+
+        &:hover {
+          border-top: 2px solid $color-gray-dark;
+        }
 
         span {
           display: none;
@@ -85,11 +89,11 @@
       }
     }
   }
+}
 
-  .tab__content {
-    height: calc(100% - 86px);
-    margin: 20px;
-    border-radius: 6px;
-    background-color: #fff;
-  }
+.tab__content {
+  height: calc(100% - 86px);
+  margin: 20px;
+  border-radius: 6px;
+  background-color: #fff;
 }

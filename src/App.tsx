@@ -1,5 +1,7 @@
-import Home from './pages/Home';
-import Layout from './pages/Layout';
+import { lazy } from 'react';
+
+const Layout = lazy(() => import('./pages/Layout'));
+const Home = lazy(() => import('./pages/Home'));
 
 const App = () => {
   return (
