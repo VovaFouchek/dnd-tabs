@@ -1,17 +1,17 @@
 import { Tab } from '../../components/Tabs';
 
-import IDashboard from '/icons/dashboard.svg';
-import IBanking from '/icons/banking.svg';
-import Iphone from '/icons/phone.svg';
-import IUser from '/icons/user.svg';
-import IShop from '/icons/shop.svg';
-import IChartPie from '/icons/chart-pie.svg';
-import IPostOffice from '/icons/post-office.svg';
-import IAdministration from '/icons/administration.svg';
-import IBook from '/icons/book.svg';
-import ICube from '/icons/cube.svg';
-import IList from '/icons/list.svg';
-import IShoppingCard from '/icons/shopping-cart.svg';
+import IDashboard from '../../assets/icons/dashboard.svg';
+import IBanking from '../../assets/icons/banking.svg';
+import Iphone from '../../assets/icons/phone.svg';
+import IUser from '../../assets/icons/user.svg';
+import IShop from '../../assets/icons/shop.svg';
+import IChartPie from '../../assets/icons/chart-pie.svg';
+import IPostOffice from '../../assets/icons/post-office.svg';
+import IAdministration from '../../assets/icons/administration.svg';
+import IBook from '../../assets/icons/book.svg';
+import ICube from '../../assets/icons/cube.svg';
+import IList from '../../assets/icons/list.svg';
+import IShoppingCard from '../../assets/icons/shopping-cart.svg';
 
 export const categories: Tab[] = [
   {

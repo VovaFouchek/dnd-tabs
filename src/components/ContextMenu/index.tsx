@@ -1,5 +1,5 @@
 import { Menu, MenuItem } from '@mui/material';
-import IPin from '../../../public/icons/pin.svg';
+import IPin from '../../assets/icons/pin.svg';
 
 interface ContextMenuProps {
   id: string;

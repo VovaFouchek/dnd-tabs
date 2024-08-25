@@ -1,0 +1,32 @@
+@use '../../styles/variables' as *;
+
+.dropdown-menu {
+  position: sticky;
+  right: 0;
+  box-shadow: -20px 0px 20px 0px $color-background-white;
+
+  &__button {
+    min-width: 40px !important;
+    height: 100% !important;
+    background-color: $color-background-white !important;
+
+    border-radius: 0 !important;
+    user-select: none !important;
+
+    &.open {
+      background-color: $color-blue !important;
+    }
+  }
+
+  .arrow__icon {
+    width: 12px;
+    filter: invert(1);
+    transform: rotate(180deg);
+    transition: transform 0.1s ease-in-out;
+
+    &.open {
+      transform: rotate(0);
+      filter: none;
+    }
+  }
+}
