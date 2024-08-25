@@ -34,11 +34,13 @@ const useTabs = ({ initialTabs, storageKey }: useTabsProps) => {
   const [tabs, setTabs] = useState<Tab[]>(getInitialTabs);
   const [activeTab, setActiveTab] = useState<string>(getInitialTab);
 
-  const [pinnedTabs, unpinnedTabs] = useMemo(() => {
+  const [pinnedTabs, unpinnedTabs, tabsList] = useMemo(() => {
     const pinned = tabs.filter((tab) => tab.isPinned);
     const unpinned = tabs.filter((tab) => !tab.isPinned);
 
-    return [pinned, unpinned];
+    const tabsList = [...pinned, ...unpinned];
+
+    return [pinned, unpinned, tabsList];
   }, [tabs]);
 
   const findTab = useCallback(
@@ -90,6 +92,7 @@ const useTabs = ({ initialTabs, storageKey }: useTabsProps) => {
   }, [activeTab, storageKey]);
 
   return {
+    tabsList,
     pinnedTabs,
     unpinnedTabs,
     activeTab,

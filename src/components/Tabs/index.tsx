@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 
@@ -25,12 +25,12 @@ interface TabsProps {
 const Tabs = ({ initialTabs, storageKey }: TabsProps) => {
   const navigate = useNavigate();
 
-  const { pinnedTabs, unpinnedTabs, activeTab, switchTab, drop, moveTab, findTab, togglePin } =
-    useTabs({ initialTabs, storageKey });
+  const { tabsList, activeTab, switchTab, drop, moveTab, findTab, togglePin } = useTabs({
+    initialTabs,
+    storageKey,
+  });
 
-  const tabs = useMemo(() => [...pinnedTabs, ...unpinnedTabs], [pinnedTabs, unpinnedTabs]);
-
-  const { filteredHiddenTabs, handleVisibilityChange } = useVisibleTabs({ tabs });
+  const { filteredHiddenTabs, handleVisibilityChange } = useVisibleTabs({ tabs: tabsList });
 
   useEffect(() => {
     const { tab } = findTab(activeTab);
@@ -40,7 +40,7 @@ const Tabs = ({ initialTabs, storageKey }: TabsProps) => {
     }
   }, [activeTab, findTab, navigate]);
 
-  if (tabs.length === 0) {
+  if (tabsList.length === 0) {
     return <div className="tabs__empty">No tabs available</div>;
   }
 
@@ -49,7 +49,7 @@ const Tabs = ({ initialTabs, storageKey }: TabsProps) => {
       <div className="wrapper">
         <div className="tabs" ref={drop}>
           <div className="tabs__pinned-inner">
-            {tabs.map((tab) => (
+            {tabsList.map((tab) => (
               <TabCard
                 onVisibilityChange={handleVisibilityChange}
                 key={tab.id}
@@ -70,7 +70,7 @@ const Tabs = ({ initialTabs, storageKey }: TabsProps) => {
         </div>
       </div>
 
-      {tabs.map((tab) =>
+      {tabsList.map((tab) =>
         activeTab === tab.id ? (
           <div className="tab__content" key={tab.id}>
             {tab.content}
