@@ -95,7 +95,7 @@ const TabCard = ({
             pinned: isPinned,
           })}
           aria-selected={activeTab === id}
-          aria-controls={isOpenMenu ? 'basic-menu' : undefined}
+          aria-controls={isOpenMenu ? 'menu' : undefined}
           aria-haspopup="true"
           aria-expanded={isOpenMenu ? 'true' : undefined}
         >

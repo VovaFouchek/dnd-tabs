@@ -28,7 +28,6 @@ const DropdownMenu = ({ buttonLabel, menuItems, arrowIcon }: DropdownMenuProps) 
 
   const handleMenuItemClick = () => {
     // TODO: Implement the logic for handling the menu item click
-    console.log('test');
   };
 
   return (

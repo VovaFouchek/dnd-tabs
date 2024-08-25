@@ -1,8 +1,9 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 
 import useTabs from '@/hooks/useTabs';
+import useVisibleTabs from '@/hooks/useVisibleTabs';
 import DropdownMenu from '../DropdownMenu';
 import TabCard from '../TabCard';
 
@@ -23,23 +24,13 @@ interface TabsProps {
 
 const Tabs = ({ initialTabs, storageKey }: TabsProps) => {
   const navigate = useNavigate();
+
   const { pinnedTabs, unpinnedTabs, activeTab, switchTab, drop, moveTab, findTab, togglePin } =
     useTabs({ initialTabs, storageKey });
 
   const tabs = useMemo(() => [...pinnedTabs, ...unpinnedTabs], [pinnedTabs, unpinnedTabs]);
 
-  const [hiddenTabs, setHiddenTabs] = useState<string[]>([]);
-
-  const handleVisibilityChange = useCallback((id: string, isVisible: boolean) => {
-    setHiddenTabs((prevHiddenTabs) =>
-      isVisible ? prevHiddenTabs.filter((tabId) => tabId !== id) : [...prevHiddenTabs, id],
-    );
-  }, []);
-
-  const filteredHiddenTabs = useMemo(
-    () => tabs.filter((tab) => hiddenTabs.includes(tab.id)),
-    [tabs, hiddenTabs],
-  );
+  const { filteredHiddenTabs, handleVisibilityChange } = useVisibleTabs({ tabs });
 
   useEffect(() => {
     const { tab } = findTab(activeTab);
@@ -49,7 +40,7 @@ const Tabs = ({ initialTabs, storageKey }: TabsProps) => {
     }
   }, [activeTab, findTab, navigate]);
 
-  if (pinnedTabs.length === 0 && unpinnedTabs.length === 0) {
+  if (tabs.length === 0) {
     return <div className="tabs__empty">No tabs available</div>;
   }
 
