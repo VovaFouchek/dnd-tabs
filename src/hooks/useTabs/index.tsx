@@ -1,6 +1,7 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Tab } from '../../components/Tabs';
 import { useDrop } from 'react-dnd';
+import { localStore } from '../../utilities/localStorage';
 
 interface useTabsProps {
   initialTabs: Tab[];
@@ -8,17 +9,36 @@ interface useTabsProps {
 }
 
 const useTabs = ({ initialTabs, storageKey }: useTabsProps) => {
+  const getInitialTabs = () => {
+    if (storageKey) {
+      const savedTabs = localStore.getData(`${storageKey}-tabs`);
+
+      if (savedTabs) {
+        return savedTabs as Tab[];
+      }
+    }
+    return initialTabs;
+  };
+
   const getInitialTab = () => {
     if (storageKey) {
-      const savedTab = localStorage.getItem(storageKey);
+      const savedTab = localStore.getData(`${storageKey}-activeTab`);
+
       return savedTab ?? tabs[0]?.id;
     }
 
     return tabs[0]?.id;
   };
 
-  const [tabs, setTabs] = useState<Tab[]>(initialTabs);
+  const [tabs, setTabs] = useState<Tab[]>(getInitialTabs);
   const [activeTab, setActiveTab] = useState<string>(getInitialTab);
+
+  const [pinnedTabs, unpinnedTabs] = useMemo(() => {
+    const pinned = tabs.filter((tab) => tab.isPinned);
+    const unpinned = tabs.filter((tab) => !tab.isPinned);
+
+    return [pinned, unpinned];
+  }, [tabs]);
 
   const findTab = useCallback(
     (id: string) => {
@@ -57,13 +77,16 @@ const useTabs = ({ initialTabs, storageKey }: useTabsProps) => {
   const switchTab = (tabName: string): void => setActiveTab(tabName);
 
   useEffect(() => {
+    if (storageKey) {
+      localStore.update(`${storageKey}-tabs`, tabs);
+    }
+  }, [tabs, storageKey]);
+
+  useEffect(() => {
     if (storageKey && activeTab) {
-      localStorage.setItem(storageKey, activeTab);
+      localStore.update(`${storageKey}-activeTab`, activeTab);
     }
   }, [activeTab, storageKey]);
-
-  const pinnedTabs = tabs.filter((tab) => tab.isPinned);
-  const unpinnedTabs = tabs.filter((tab) => !tab.isPinned);
 
   return {
     pinnedTabs,
