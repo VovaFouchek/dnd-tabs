@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Tab } from '../../components/Tabs';
 import { useDrop } from 'react-dnd';
-import { localStore } from '../../utilities/localStorage';
+
+import { Tab } from '@/components/Tabs';
+import { localStore } from '@/utilities/localStorage';
 
 interface useTabsProps {
   initialTabs: Tab[];

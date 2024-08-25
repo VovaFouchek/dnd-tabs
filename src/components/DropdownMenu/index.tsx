@@ -3,8 +3,8 @@ import { useState } from 'react';
 import cx from 'classnames';
 import { MenuItem, Menu, Button } from '@mui/material';
 
+import ArrowIcon from '@/assets/icons/arrow.svg';
 import { Tab } from '../Tabs';
-import ArrowIcon from '../../assets/icons/arrow.svg';
 
 import './dropdownMenu.scss';
 
@@ -27,6 +27,7 @@ const DropdownMenu = ({ buttonLabel, menuItems, arrowIcon }: DropdownMenuProps) 
   };
 
   const handleMenuItemClick = () => {
+    // TODO: Implement the logic for handling the menu item click
     console.log('test');
   };
 
@@ -63,8 +64,8 @@ const DropdownMenu = ({ buttonLabel, menuItems, arrowIcon }: DropdownMenuProps) 
         }}
       >
         {menuItems?.map((item) => (
-          <MenuItem key={item.id} onClick={handleMenuItemClick}>
-            {/* <img src={item.icon} className="tab__icon" /> */}
+          <MenuItem key={item.id} onClick={handleMenuItemClick} className="menu__item">
+            <img src={item.icon} className="menu__item-icon" />
             {item.label}
           </MenuItem>
         ))}

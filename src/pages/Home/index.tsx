@@ -1,5 +1,5 @@
-import Tabs from '../../components/Tabs';
-import { categories } from '../../utilities/constants';
+import Tabs from '@/components/Tabs';
+import { categories } from '@/utilities/constants';
 
 const Home = () => {
   return (

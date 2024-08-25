@@ -1,11 +1,11 @@
 import { memo, useState } from 'react';
 
 import cx from 'classnames';
+import { Tooltip } from '@mui/material';
 
-import useTabDragAndDrop from '../../hooks/useTabDragAndDrop';
+import useTabDragAndDrop from '@/hooks/useTabDragAndDrop';
 import ContextMenu from '../ContextMenu';
 import { Tab } from '../Tabs';
-import { Tooltip } from '@mui/material';
 
 interface TabCardProps {
   tab: Tab;

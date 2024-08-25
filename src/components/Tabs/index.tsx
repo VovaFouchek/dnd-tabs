@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 
-import useTabs from '../../hooks/useTabs';
+import useTabs from '@/hooks/useTabs';
 import DropdownMenu from '../DropdownMenu';
 import TabCard from '../TabCard';
 
