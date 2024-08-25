@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 
@@ -26,6 +26,21 @@ const Tabs = ({ initialTabs, storageKey }: TabsProps) => {
   const { pinnedTabs, unpinnedTabs, activeTab, switchTab, drop, moveTab, findTab, togglePin } =
     useTabs({ initialTabs, storageKey });
 
+  const tabs = useMemo(() => [...pinnedTabs, ...unpinnedTabs], [pinnedTabs, unpinnedTabs]);
+
+  const [hiddenTabs, setHiddenTabs] = useState<string[]>([]);
+
+  const handleVisibilityChange = useCallback((id: string, isVisible: boolean) => {
+    setHiddenTabs((prevHiddenTabs) =>
+      isVisible ? prevHiddenTabs.filter((tabId) => tabId !== id) : [...prevHiddenTabs, id],
+    );
+  }, []);
+
+  const filteredHiddenTabs = useMemo(
+    () => tabs.filter((tab) => hiddenTabs.includes(tab.id)),
+    [tabs, hiddenTabs],
+  );
+
   useEffect(() => {
     const { tab } = findTab(activeTab);
 
@@ -43,8 +58,9 @@ const Tabs = ({ initialTabs, storageKey }: TabsProps) => {
       <div className="wrapper">
         <div className="tabs" ref={drop}>
           <div className="tabs__pinned-inner">
-            {pinnedTabs.map((tab) => (
+            {tabs.map((tab) => (
               <TabCard
+                onVisibilityChange={handleVisibilityChange}
                 key={tab.id}
                 tab={tab}
                 moveTab={moveTab}
@@ -57,24 +73,13 @@ const Tabs = ({ initialTabs, storageKey }: TabsProps) => {
             ))}
           </div>
 
-          {unpinnedTabs.map((tab) => (
-            <TabCard
-              key={tab.id}
-              tab={tab}
-              moveTab={moveTab}
-              findTab={findTab}
-              activeTab={activeTab}
-              switchTab={switchTab}
-              isPinned={tab.isPinned}
-              togglePin={togglePin}
-            />
-          ))}
-
-          {pinnedTabs.length > 0 && <DropdownMenu arrowIcon menuItems={pinnedTabs} />}
+          {filteredHiddenTabs.length > 0 && (
+            <DropdownMenu arrowIcon menuItems={filteredHiddenTabs} />
+          )}
         </div>
       </div>
 
-      {[...pinnedTabs, ...unpinnedTabs].map((tab) =>
+      {tabs.map((tab) =>
         activeTab === tab.id ? (
           <div className="tab__content" key={tab.id}>
             {tab.content}

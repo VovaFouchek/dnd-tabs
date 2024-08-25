@@ -1,7 +1,9 @@
-import { memo, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 
 import cx from 'classnames';
 import { Tooltip } from '@mui/material';
+import { useInView } from 'react-intersection-observer';
+import { mergeRefs } from 'react-merge-refs';
 
 import useTabDragAndDrop from '@/hooks/useTabDragAndDrop';
 import ContextMenu from '../ContextMenu';
@@ -15,6 +17,7 @@ interface TabCardProps {
   switchTab: (id: string) => void;
   moveTab: (id: string, to: number) => void;
   findTab: (id: string) => { index: number };
+  onVisibilityChange: (id: string, inView: boolean) => void;
 }
 
 const tooltipStylesProps = {
@@ -40,9 +43,15 @@ const TabCard = ({
   switchTab,
   moveTab,
   findTab,
+  onVisibilityChange,
 }: TabCardProps) => {
   const { id, label, icon } = tab;
-  const { ref, isDragging } = useTabDragAndDrop({ id, isPinned, moveTab, findTab });
+  const { ref: dragRef, isDragging } = useTabDragAndDrop({ id, isPinned, moveTab, findTab });
+  const { ref: viewRef, inView } = useInView({
+    triggerOnce: false,
+    threshold: 0,
+  });
+  const mergedRef = mergeRefs([dragRef, viewRef]);
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const isOpenMenu = Boolean(anchorEl);
@@ -55,6 +64,10 @@ const TabCard = ({
   const handleCloseMenu = () => {
     setAnchorEl(null);
   };
+
+  useEffect(() => {
+    onVisibilityChange(id, inView);
+  }, [id, inView, onVisibilityChange]);
 
   const tooltipTitle = () => (
     <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -73,7 +86,7 @@ const TabCard = ({
           role="tab"
           id={id}
           key={id}
-          ref={ref}
+          ref={mergedRef}
           onClick={() => switchTab(id)}
           onContextMenu={handleContextMenu}
           className={cx('tab', {
