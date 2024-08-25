@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+
+import { useNavigate } from 'react-router-dom';
 
 import useTabs from '../../hooks/useTabs';
+import DropdownMenu from '../DropdownMenu';
 import TabCard from '../TabCard';
 
 import './tabs.scss';
@@ -19,8 +22,17 @@ interface TabsProps {
 }
 
 const Tabs = ({ initialTabs, storageKey }: TabsProps) => {
+  const navigate = useNavigate();
   const { pinnedTabs, unpinnedTabs, activeTab, switchTab, drop, moveTab, findTab, togglePin } =
     useTabs({ initialTabs, storageKey });
+
+  useEffect(() => {
+    const { tab } = findTab(activeTab);
+
+    if (tab) {
+      navigate(`/dnd-tabs/${tab.id}`);
+    }
+  }, [activeTab, findTab, navigate]);
 
   if (pinnedTabs.length === 0 && unpinnedTabs.length === 0) {
     return <div className="tabs__empty">No tabs available</div>;
@@ -57,6 +69,8 @@ const Tabs = ({ initialTabs, storageKey }: TabsProps) => {
               togglePin={togglePin}
             />
           ))}
+
+          {pinnedTabs.length > 0 && <DropdownMenu arrowIcon menuItems={pinnedTabs} />}
         </div>
       </div>
 
